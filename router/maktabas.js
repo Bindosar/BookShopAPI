@@ -2,11 +2,9 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const {
-  bookCreate,
-  bookList,
-  bookUpdate,
-  bookDelete,
-} = require("../controllers/bookController");
+  maktabaCreate,
+  maktabaList,
+} = require("../controllers/maktabaController");
 
 const storage = multer.diskStorage({
   destination: "./media",
@@ -18,16 +16,10 @@ const upload = multer({
   storage,
 });
 
-// DELETE
-router.delete("/:bookId", bookDelete);
-
-// Book Create
-router.post("/", upload.single("image"), bookCreate);
-
-// UPDATE
-router.put("/:bookId", upload.single("image"), bookUpdate);
+// Maktaba Create
+router.post("/", upload.single("image"), maktabaCreate);
 
 // List
-router.get("/", bookList);
+router.get("/", maktabaList);
 
 module.exports = router;

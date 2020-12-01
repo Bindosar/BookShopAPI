@@ -1,21 +1,18 @@
-let books = require("../router/books");
-const slugify = require("slugify");
-
-
-const books = await Book.findAll({
-  attributes: { exclude: ["createdAt", "updatedAt"] },
-});
+const { Book } = require("../db/models");
 
 exports.bookCreate = async (req, res, next) => {
   try {
-    const newBook = await Book.create(req, body);
+    if (req.file) {
+      req.body.image = `https://${req.get("host")}/media/${req.file.filename}`;
+    }
+    const newBook = await Book.create(req.body);
     res.status(201).json(newBook);
   } catch (error) {
-    res.status(500).json({message:error.message})
+    res.status(500).json({ message: error.message });
   }
 };
 
-exports.bookList = (req, res) => {
+exports.bookList = async (req, res) => {
   try {
     const books = await Book.findAll();
     res.json(books);
@@ -24,32 +21,28 @@ exports.bookList = (req, res) => {
   }
 };
 
-
-exports.bookUpdate = (req, res) => {
-  const {bookId} = req.params;
-  try{
-    const foundBook = await Book.findByPk(bookId);
-    if(foundBook){
-      await foundBook.update(req.body);
-      res.status(204).end();
-    }else{
-      res.status(404).json({message : "Book not found "})
+exports.bookUpdate = async (req, res) => {
+  try {
+    if (req.file) {
+      req.body.image = `https://${req.get("host")}/media/${req.file.name}`;
     }
-  }catch(error){
-    res.status(500).json({message : error.message});
+    await req.book.update(req.body);
+    res.status(204).end;
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-}
+};
 exports.bookDelete = async (req, res) => {
   const { bookId } = req.params;
-  try{
-    const foundBook = await Book.findByPk(bookId)
-    if(foundBook){
-      await foundBook.destroy()
+  try {
+    const foundBook = await Book.findByPk(bookId);
+    if (foundBook) {
+      await foundBook.destroy();
       res.status(204).end();
-    }else{
-      res.status(404).json({message : "Book not found"})
+    } else {
+      res.status(404).json({ message: "Book not found" });
     }
-  }catch(err){
-    res.status(500).json({message : error.message})
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

@@ -1,8 +1,7 @@
-const sequelize = require("sequelize");
 const SequelizeSlugify = require("sequelize-slugify");
 
-moudle.exports = (sequelize, DataTypes) => {
-  const Book = sequelize.define("Book ", {
+module.exports = (sequelize, DataTypes) => {
+  const Book = sequelize.define("Book", {
     name: {
       type: DataTypes.STRING,
     },
