@@ -17,14 +17,14 @@ app.use((err, req, res, next) => {
   console.log("Handiling middleware error ", err);
 });
 
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
   res
     .status(err.status)
     .json({ message: err.message || "Interal Server Error" });
 });
 const run = async () => {
   try {
-    await db.sequelize.sync();
+    await db.sequelize.sync({ force: true });
     console.log("Connection to the database successful ! ");
     await app.listen(8000, () => {
       console.log("The app is running on localhost:8000 ! ");

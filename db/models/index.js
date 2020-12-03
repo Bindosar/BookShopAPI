@@ -43,4 +43,14 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+//Relations
+db.Maktaba.hasMany(db.Book, {
+  foreignKey: { fieldName: "maktabaId", allowNull: false },
+});
+
+db.Book.belongsTo(db.maktaba, {
+  as: "maktaba",
+  foreignKey: { fieldName: "maktabaId" },
+});
+
 module.exports = db;

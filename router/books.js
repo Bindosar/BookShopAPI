@@ -6,6 +6,7 @@ const {
   bookList,
   bookUpdate,
   bookDelete,
+  fetchBook,
 } = require("../controllers/bookController");
 
 const storage = multer.diskStorage({
@@ -16,6 +17,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
+});
+
+router.param("bookId", async (req, res, next, bookId) => {
+  const book = await fetchBook(bookId, next);
+  if (book) {
+    req.book = book;
+    next();
+  } else {
+    const err = new Error("Book Not Found");
+    err.status = 404;
+    next(err);
+  }
 });
 
 // DELETE
