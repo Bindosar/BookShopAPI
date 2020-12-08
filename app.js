@@ -5,11 +5,14 @@ const bodyParser = require("body-parser");
 const bookRouters = require("./router/books");
 const path = require("path");
 const db = require("./db/models");
+const userRouters = require("./router/users");
 const maktabaRouters = require("./router/maktabas");
 app.use(cors());
 
 app.use(bodyParser.json());
 
+// Routes
+app.use(userRouters);
 app.use("/maktabas", maktabaRouters);
 app.use("/media", express.static(path.join(__dirname, "media")));
 
